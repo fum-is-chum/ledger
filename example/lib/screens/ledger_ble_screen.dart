@@ -15,7 +15,7 @@ class LedgerBleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ledger Nano X'),
+        title: const Text('Ledger'),
       ),
       body: const LedgerBleView(),
     );
@@ -44,7 +44,7 @@ class _LedgerBleViewState extends State<LedgerBleView> {
         BlocListener<LedgerBleBloc, LedgerBleState>(
           listener: (_, state) {
             if (state.status == LedgerBleStatus.failure) {
-              'Please open the Algorand App on your ledger device.'
+              'Please open the Ethereum App on your ledger device.'
                   .toast(context);
             }
           },

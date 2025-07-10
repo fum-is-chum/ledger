@@ -16,7 +16,7 @@ class LedgerBleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Ledger Nano',
+      title: 'Ledger',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

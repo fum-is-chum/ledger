@@ -331,10 +331,9 @@ packages:
   ledger_flutter:
     dependency: "direct main"
     description:
-      name: ledger_flutter
-      sha256: f1680060ed6ff78f275837e0024ccaf667715a59ba7aa29fa7354bc7752e71c8
-      url: "https://pub.dev"
-    source: hosted
+      path: ".."
+      relative: true
+    source: path
     version: "1.0.1"
   ledger_usb:
     dependency: transitive

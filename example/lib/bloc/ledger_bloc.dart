@@ -66,9 +66,9 @@ class LedgerBleBloc extends Bloc<LedgerBleEvent, LedgerBleState> {
     final accounts = <String>[];
 
     try {
-      final algorandApp = EthereumLedgerApp(channel.ledger);
+      final ethApp = EthereumLedgerApp(channel.ledger);
 
-      final addresses = await algorandApp.getAccounts(device);
+      final addresses = await ethApp.getAccounts(device);
       accounts.addAll(addresses);
 
       emit(state.copyWith(
@@ -95,8 +95,8 @@ class LedgerBleBloc extends Bloc<LedgerBleEvent, LedgerBleState> {
     final device = event.device;
 
     try {
-      final algorandApp = EthereumLedgerApp(channel.ledger);
-      final signature = await algorandApp.signPersonalMessage(
+      final ethApp = EthereumLedgerApp(channel.ledger);
+      final signature = await ethApp.signPersonalMessage(
         device,
         utf8.encode('This is message to sign'),
       );
