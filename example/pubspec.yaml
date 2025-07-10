@@ -19,13 +19,10 @@ dependencies:
 
   permission_handler: ^10.2.0
 
-  ledger_flutter: ^1.0.0
+  ledger_flutter: ^1.0.1
     # path: ../
 
-  ledger_algorand: ^1.0.0-pre.1
-    # path: "../../ledger-algorand"
-
-  algorand_dart: ^2.0.0-dev.4
+  ledger_ethereum: ^1.0.1
 
 dev_dependencies:
   flutter_test:

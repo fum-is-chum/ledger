@@ -1,10 +1,9 @@
-import 'package:algorand_dart/algorand_dart.dart';
 import 'package:flutter/material.dart';
 
-typedef AccountGestureCallback = void Function(Address address);
+typedef AccountGestureCallback = void Function(String address);
 
 class AccountListTile extends StatelessWidget {
-  final Address address;
+  final String address;
   final AccountGestureCallback? onTap;
 
   const AccountListTile({
@@ -16,7 +15,7 @@ class AccountListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(address.encodedAddress),
+      title: Text(address),
       onTap: () {
         onTap?.call(address);
       },

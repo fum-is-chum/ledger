@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
-import 'package:algorand_dart/algorand_dart.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:convert/convert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ledger_algorand/ledger_algorand.dart';
+import 'package:ledger_ethereum/ledger_ethereum.dart';
 import 'package:ledger_example/bloc/ledger_event.dart';
 import 'package:ledger_example/bloc/ledger_state.dart';
 import 'package:ledger_example/channel/ledger_channel.dart';
@@ -63,16 +63,13 @@ class LedgerBleBloc extends Bloc<LedgerBleEvent, LedgerBleState> {
     await channel.ledger.stopScanning();
     await channel.ledger.connect(device);
 
-    final accounts = <Address>[];
+    final accounts = <String>[];
 
     try {
-      final algorandApp = AlgorandLedgerApp(channel.ledger);
-      algorandApp.accountIndex = 1;
+      final algorandApp = EthereumLedgerApp(channel.ledger);
 
-      final publicKeys = await algorandApp.getAccounts(device);
-      accounts.addAll(
-        publicKeys.map((pk) => Address.fromAlgorandAddress(pk)).toList(),
-      );
+      final addresses = await algorandApp.getAccounts(device);
+      accounts.addAll(addresses);
 
       emit(state.copyWith(
         status: () => LedgerBleStatus.connected,
@@ -96,30 +93,16 @@ class LedgerBleBloc extends Bloc<LedgerBleEvent, LedgerBleState> {
     Emitter emit,
   ) async {
     final device = event.device;
-    final account = event.account;
-    final tx = await _buildTransaction(account: account);
 
     try {
-      final algorandApp = AlgorandLedgerApp(channel.ledger);
-      algorandApp.accountIndex = 1;
-      final signature = await algorandApp.signTransaction(
+      final algorandApp = EthereumLedgerApp(channel.ledger);
+      final signature = await algorandApp.signPersonalMessage(
         device,
-        tx.toBytes(),
-      );
-
-      final signedTx = SignedTransaction(
-        transaction: tx,
-        signature: signature,
-      );
-
-      final txId = await channel.algorand.sendTransaction(
-        signedTx,
-        waitForConfirmation: true,
+        utf8.encode('This is message to sign'),
       );
 
       if (kDebugMode) {
-        print(txId);
-        print(signedTx);
+        print(signature);
       }
 
       emit(state.copyWith(
@@ -159,49 +142,5 @@ class LedgerBleBloc extends Bloc<LedgerBleEvent, LedgerBleState> {
     }
 
     return super.close();
-  }
-
-  Future<RawTransaction> _buildTransaction({required Address account}) async {
-    final tx = await channel.algorand.createPaymentTransaction(
-      sender: account,
-      receiver: account,
-      amount: Algo.toMicroAlgos(1),
-    );
-
-    return tx;
-  }
-
-  Future<RawTransaction> _buildTransaction2({required Address account}) async {
-    final params = (await channel.algorand.getSuggestedTransactionParams());
-    int inputAssetIndicator = 0x04;
-    final part1 = Uint8List.fromList([inputAssetIndicator]);
-    final part2 = convertTo64BitBigEndian(100000);
-    final part3 = convertTo64BitBigEndian(23035);
-    final part4 = Uint8List(73);
-    final txn2Arguments = <Uint8List>[
-      Uint8List.fromList([0x00]),
-      Uint8List.fromList([0x03]),
-      convertTo64BitBigEndian(0),
-      Uint8List.fromList(part1 + part2 + part3 + part4),
-    ];
-    // Create the transaction
-    final tx = await (ApplicationBaseTransactionBuilder()
-          ..sender = Address.fromAlgorandAddress(account.encodedAddress)
-          ..flatFee = 3000
-          ..applicationId = 777628254
-          ..foreignAssets = [31566704]
-          ..arguments = txn2Arguments
-          ..suggestedParams = params)
-        .build();
-    AtomicTransfer.group([tx]);
-    return tx;
-  }
-
-  static Uint8List convertTo64BitBigEndian(int number) {
-    final result = Uint8List(8);
-    for (int i = 0; i < 8; ++i) {
-      result[i] = (number >> (8 * (7 - i))) & 0xFF;
-    }
-    return result;
   }
 }
