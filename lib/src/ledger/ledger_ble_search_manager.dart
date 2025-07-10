@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:ledger_flutter/ledger_flutter.dart';
 
+import 'ledger_device_type.dart';
+
 class LedgerBleSearchManager extends BleSearchManager {
-  /// Ledger Nano X service id
-  static const serviceId = '13D63400-2C97-0004-0000-4C6564676572';
-  static const writeCharacteristicKey = '13D63400-2C97-0004-0002-4C6564676572';
-  static const notifyCharacteristicKey = '13D63400-2C97-0004-0001-4C6564676572';
+  final List<Uuid> _withServices =
+      LedgerDeviceType.ble.map((e) => Uuid.parse(e.serviceId)).toList();
 
   final _bleManager = FlutterReactiveBle();
   final LedgerOptions _options;
@@ -42,22 +42,31 @@ class LedgerBleSearchManager extends BleSearchManager {
     streamController = StreamController.broadcast();
 
     _scanSubscription?.cancel();
-    _scanSubscription = _bleManager.scanForDevices(
-      withServices: [Uuid.parse(serviceId)],
+    _scanSubscription = _bleManager
+        .scanForDevices(
+      withServices: _withServices,
       scanMode: options?.scanMode ?? _options.scanMode,
       requireLocationServicesEnabled: options?.requireLocationServicesEnabled ??
           _options.requireLocationServicesEnabled,
-    ).listen(
+    )
+        .listen(
       (device) {
         if (_scannedIds.contains(device.id)) {
           return;
         }
+
+        final deviceInfo = LedgerDeviceType.ble.firstWhere(
+          (element) =>
+              device.serviceUuids.contains(Uuid.parse(element.serviceId)),
+          orElse: () => LedgerDeviceType.nanoX,
+        );
 
         final lDevice = LedgerDevice(
           id: device.id,
           name: device.name,
           connectionType: ConnectionType.ble,
           rssi: device.rssi,
+          deviceInfo: deviceInfo,
         );
 
         _scannedIds.add(lDevice.id);

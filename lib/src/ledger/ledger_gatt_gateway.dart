@@ -3,15 +3,11 @@ import 'dart:collection';
 
 import 'package:ledger_flutter/ledger_flutter.dart';
 
+import 'ledger_device_type.dart';
+
 /// https://learn.adafruit.com/introduction-to-bluetooth-low-energy/gatt
 /// https://gist.github.com/btchip/e4994180e8f4710d29c975a49de46e3a
 class LedgerGattGateway extends GattGateway {
-  /// Ledger Nano X service id
-  static const serviceId = '13D63400-2C97-0004-0000-4C6564676572';
-
-  static const writeCharacteristicKey = '13D63400-2C97-0004-0002-4C6564676572';
-  static const notifyCharacteristicKey = '13D63400-2C97-0004-0001-4C6564676572';
-
   final FlutterReactiveBle bleManager;
   final BlePacker _packer;
   final DiscoveredLedger ledger;
@@ -136,12 +132,19 @@ class LedgerGattGateway extends GattGateway {
     characteristicWrite = null;
     characteristicNotify = null;
 
-    getService(Uuid.parse(serviceId))?.let((service) {
-      characteristicWrite =
-          getCharacteristic(service, Uuid.parse(writeCharacteristicKey));
-      characteristicNotify =
-          getCharacteristic(service, Uuid.parse(notifyCharacteristicKey));
-    });
+    try {
+      for (final bleDeviceInfo in LedgerDeviceType.ble) {
+        final service = getService(Uuid.parse(bleDeviceInfo.serviceId));
+        if (service != null) {
+          characteristicWrite = getCharacteristic(
+              service, Uuid.parse(bleDeviceInfo.writeCharacteristicKey));
+          characteristicNotify = getCharacteristic(
+              service, Uuid.parse(bleDeviceInfo.notifyCharacteristicKey));
+        }
+      }
+    } catch (e) {
+      return false;
+    }
 
     return characteristicWrite != null && characteristicNotify != null;
   }

@@ -2,18 +2,21 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:ledger_flutter/ledger_flutter.dart';
+import 'package:ledger_flutter/src/ledger/ledger_device_type.dart';
 import 'package:ledger_usb/ledger_usb.dart';
 import 'package:ledger_usb/usb_device.dart';
 
 class LedgerUsbManager extends UsbManager {
   final _ledgerUsb = LedgerUsb();
 
+  // TODO: device info for usb, temporary default nanoS
   @override
   Future<List<LedgerDevice>> listDevices() async {
     try {
       final devices = await _ledgerUsb.listDevices();
       return devices
-          .map((device) => LedgerDevice.fromUsbDevice(device))
+          .map((device) =>
+              LedgerDevice.fromUsbDevice(device, LedgerDeviceType.nanoS))
           .toList();
     } on PlatformException catch (ex) {
       throw LedgerException.fromPlatformException(ex);
