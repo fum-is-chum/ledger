@@ -18,13 +18,15 @@ class LedgerDevice {
     this.rssi = 0,
   });
 
-  factory LedgerDevice.fromUsbDevice(
-      UsbDevice device, LedgerDeviceType deviceInfo) {
+  factory LedgerDevice.fromUsbDevice(UsbDevice device) {
     return LedgerDevice(
         id: device.identifier,
         name: device.productName,
         connectionType: ConnectionType.usb,
-        deviceInfo: deviceInfo);
+        deviceInfo: LedgerDeviceType.values.firstWhere(
+          (e) => device.productId >> 8 == e.productIdMM,
+          orElse: () => LedgerDeviceType.nanoX,
+        ));
   }
 
   LedgerDevice copyWith(
