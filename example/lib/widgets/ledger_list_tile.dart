@@ -16,7 +16,8 @@ class LedgerListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text('${ledger.name} ($connectionType)'),
+      title: Text(
+          'Ledger ${ledger.deviceInfo.name} - ${ledger.name} ($connectionType)'),
       onTap: () {
         onTap?.call(ledger);
       },

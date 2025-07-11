@@ -103,13 +103,38 @@ class _LedgerBleViewState extends State<LedgerBleView> {
                         if (device == null || account == null) {
                           return;
                         }
-
                         context
                             .read<LedgerBleBloc>()
-                            .add(LedgerBleSignTransactionRequested(
-                              device,
-                              account,
-                            ));
+                            .add(LedgerBleSignPersonalMessageRequested(device));
+                      }
+                    : null,
+                child: const Text('Sign personal message'),
+              ),
+              TextButton(
+                onPressed: state.status == LedgerBleStatus.connected
+                    ? () async {
+                        final device = state.device;
+                        final account = state.accounts.firstOrNull;
+                        if (device == null || account == null) {
+                          return;
+                        }
+                        context
+                            .read<LedgerBleBloc>()
+                            .add(LedgerBleSignTypedDataRequested(device));
+                      }
+                    : null,
+                child: const Text('Sign typed data'),
+              ),
+              TextButton(
+                onPressed: state.status == LedgerBleStatus.connected
+                    ? () async {
+                        final device = state.device;
+                        final account = state.accounts.firstOrNull;
+                        if (device == null || account == null) {
+                          return;
+                        }
+                        context.read<LedgerBleBloc>().add(
+                            LedgerBleSignTransactionRequested(device, account));
                       }
                     : null,
                 child: const Text('Sign transaction'),
@@ -124,7 +149,6 @@ class _LedgerBleViewState extends State<LedgerBleView> {
                         if (device == null) {
                           return;
                         }
-
                         context
                             .read<LedgerBleBloc>()
                             .add(LedgerBleDisconnectRequested(device));

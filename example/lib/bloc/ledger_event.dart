@@ -37,3 +37,21 @@ class LedgerBleSignTransactionRequested extends LedgerBleEvent {
   @override
   List<Object?> get props => [device, account];
 }
+
+class LedgerBleSignPersonalMessageRequested extends LedgerBleEvent {
+  final LedgerDevice device;
+
+  LedgerBleSignPersonalMessageRequested(this.device);
+
+  @override
+  List<Object?> get props => [device];
+}
+
+class LedgerBleSignTypedDataRequested extends LedgerBleEvent {
+  final LedgerDevice device;
+
+  LedgerBleSignTypedDataRequested(this.device);
+
+  @override
+  List<Object?> get props => [device];
+}

@@ -175,7 +175,7 @@ packages:
     source: hosted
     version: "2.0.5"
   eth_sig_util:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: eth_sig_util
       sha256: "20fdc5ce3864e70e5ade1c1cd03cce4ef01018db00adab107303f9055d26b01a"
@@ -621,7 +621,7 @@ packages:
     source: hosted
     version: "1.1.2"
   web3dart_avacus:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: web3dart_avacus
       sha256: "5facc62f43fe28e1da079d5460cb165efd6af188d1a845aea93db41a46e23db7"
