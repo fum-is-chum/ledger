@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:ledger_flutter/src/utils/buffer.dart';
+import 'package:ledger/src/utils/buffer.dart';
 
 abstract class LedgerOperation<T> {
   /// The Packet sequence index describes the current sequence for fragmented

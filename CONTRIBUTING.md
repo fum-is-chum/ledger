@@ -1,8 +1,8 @@
-# Contributing to ledger-flutter
+# Contributing to ledger
 
 👍🎉 First off, thanks for taking the time to contribute! 🎉👍
 
-The following is a set of guidelines for contributing to ledger-flutter.
+The following is a set of guidelines for contributing to ledger.
 These are mostly guidelines, not rules. Use your best judgment,
 and feel free to propose changes to this document in a pull request.
 
@@ -56,5 +56,5 @@ on Discord.
 
 ## License
 
-By contributing to ledger-flutter, you agree that your contributions will be licensed
+By contributing to ledger, you agree that your contributions will be licensed
 under its [MIT license](LICENSE).

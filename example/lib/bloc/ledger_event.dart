@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:ledger_flutter/ledger_flutter.dart';
+import 'package:ledger/ledger.dart';
 
 abstract class LedgerBleEvent extends Equatable {
   @override

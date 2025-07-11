@@ -17,17 +17,10 @@ dependencies:
   collection: ^1.16.0
   convert: ^3.1.1
   permission_handler: ^10.2.0
-
-  ledger_flutter:
-    path: ../
-
-  ledger_ethereum: ^1.0.1
+  ledger: ^1.1.0
+  ledger_ethereum: ^1.0.2
   web3dart_avacus: ^2.4.0
   eth_sig_util: ^0.0.9
-
-dependency_overrides:
-  ledger_flutter:
-    path: ../
 
 dev_dependencies:
   flutter_test:

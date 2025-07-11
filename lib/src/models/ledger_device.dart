@@ -1,4 +1,4 @@
-import 'package:ledger_flutter/src/ledger/connection_type.dart';
+import 'package:ledger/src/ledger/connection_type.dart';
 import 'package:ledger_usb/usb_device.dart';
 
 import '../ledger/ledger_device_type.dart';

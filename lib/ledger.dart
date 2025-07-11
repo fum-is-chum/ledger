@@ -1,4 +1,4 @@
-library ledger_flutter;
+library ledger;
 
 export 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
@@ -8,7 +8,7 @@ export 'src/api/ble_search_manager.dart';
 export 'src/api/gatt_gateway.dart';
 export 'src/api/usb_manager.dart';
 export 'src/exceptions/ledger_exception.dart';
-export 'src/ledger.dart';
+export 'src/ledger_base.dart';
 export 'src/ledger/connection_type.dart';
 export 'src/ledger/ledger_app.dart';
 export 'src/ledger/ledger_ble_connection_manager.dart';

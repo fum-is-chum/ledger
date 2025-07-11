@@ -320,21 +320,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  ledger:
+    dependency: "direct main"
+    description:
+      name: ledger
+      sha256: d7d3fe0927fdf3339faaf02d943d67f894922a0970d67e4868dbee6320ea7a90
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   ledger_ethereum:
     dependency: "direct main"
     description:
       name: ledger_ethereum
-      sha256: "6662b28c90bada8d628cde08263ff08e4af64d48a7883052291e03b96e69ef98"
+      sha256: "7e2381b3195d74d974e4c8c634fb2cdbbd6154322a9fc494ab746bf1b1b787b9"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
-  ledger_flutter:
-    dependency: "direct main"
-    description:
-      path: ".."
-      relative: true
-    source: path
-    version: "1.0.1"
+    version: "1.0.2"
   ledger_usb:
     dependency: transitive
     description:

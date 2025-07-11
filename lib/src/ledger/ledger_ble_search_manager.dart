@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:ledger_flutter/ledger_flutter.dart';
+import 'package:ledger/ledger.dart';
 
 import 'ledger_device_type.dart';
 

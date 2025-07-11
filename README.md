@@ -4,16 +4,16 @@
     <img src="https://cdn1.iconfinder.com/data/icons/minicons-4/64/ledger-512.png" width="100"/>
   </a>
 
-<h1 align="center">ledger-flutter</h1>
+<h1 align="center">ledger</h1>
 
 <p align="center">
-    A Flutter plugin to scan, connect & sign transactions using Ledger Nano devices using USB & BLE
+    A Flutter plugin to scan, connect & sign transactions using Ledger devices using USB & BLE
     <br />
-    <a href="https://pub.dev/documentation/ledger_flutter/latest/"><strong>« Explore the docs »</strong></a>
+    <a href="https://pub.dev/documentation/ledger/latest/"><strong>« Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/RootSoft/ledger-flutter/issues">Report Bug</a>
-    · <a href="https://github.com/RootSoft/ledger-flutter/issues">Request Feature</a>
+    <a href="https://github.com/wakumo/ledger/issues">Report Bug</a>
+    · <a href="https://github.com/wakumo/ledger/issues">Request Feature</a>
   </p>
 </div>
 <br/>
@@ -21,8 +21,9 @@
 ---
 
 ## Overview
+This package has been forked from [ledger-flutter](https://github.com/RootSoft/ledger-flutter)
 
-Ledger Nano devices are the perfect hardware wallets for managing your crypto & NFTs on the go.
+Ledger devices are the perfect hardware wallets for managing your crypto & NFTs on the go.
 This Flutter plugin makes it easy to find nearby Ledger devices, connect with them and sign transactions over USB and/or BLE.
 
 
@@ -48,7 +49,7 @@ Check out our other Web3 packages below:
 Install the latest version of this package via pub.dev:
 
 ```yaml
-ledger_flutter: ^latest-version
+ledger: ^latest-version
 ```
 
 You might want to install additional Ledger App Plugins to support different blockchains. See the [Ledger Plugins](#custom-ledger-app-plugins) section below.
@@ -378,26 +379,6 @@ Future<List<String>> getAccounts(LedgerDevice device) async {
 }
 ```
 
-
-## Sponsors
-
-Our top sponsors are shown below!
-
-<table>
-    <tbody>
-        <tr>
-            <td align="center" style="background-color: white">
-                <a href="https://defly.app/"><img src="https://play-lh.googleusercontent.com/Qr5ob7KMKf7gfxR4sQOCzs4LKi3pjCbbIBi7MkevWVP6SrEhS2vjDaqzDXyr9xWAYRMz=w240-h480-rw" width="225"/></a>
-                <p><a href="https://defly.app/"><strong>Defly</strong></a></p>
-            </td>
-            <td align="center" style="background-color: white">
-                <a href="https://blockshake.io/"><img src="https://pbs.twimg.com/profile_images/1491803720593522691/7jXDOpGn_400x400.png" width="225"/></a>
-                <p><a href="https://blockshake.io/"><strong>Blockshake</strong></a></p>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -414,4 +395,4 @@ Please read our [Contributing guidelines](CONTRIBUTING.md) and try to follow [Co
 
 ## License
 
-The ledger_flutter SDK is released under the MIT License (MIT). See LICENSE for details.
+The ledger SDK is released under the MIT License (MIT). See LICENSE for details.

@@ -1,4 +1,4 @@
-import 'package:ledger_flutter/ledger_flutter.dart';
+import 'package:ledger/ledger.dart';
 
 abstract class UsbManager {
   Future<List<LedgerDevice>> listDevices();
