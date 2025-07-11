@@ -13,6 +13,7 @@ export 'src/ledger/connection_type.dart';
 export 'src/ledger/ledger_app.dart';
 export 'src/ledger/ledger_ble_connection_manager.dart';
 export 'src/ledger/ledger_ble_search_manager.dart';
+export 'src/ledger/ledger_device_type.dart';
 export 'src/ledger/ledger_gatt_gateway.dart';
 export 'src/ledger/ledger_gatt_reader.dart';
 export 'src/ledger/ledger_operation.dart';
