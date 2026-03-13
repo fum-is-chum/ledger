@@ -6,19 +6,27 @@ repository: https://github.com/wakumo/ledger
 issue_tracker: https://github.com/wakumo/ledger/issues
 
 environment:
-  sdk: '>=2.17.6 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  flutter_reactive_ble: ^5.0.3
+  flutter_reactive_ble:
+    path: ../flutter_reactive_ble/packages/flutter_reactive_ble
+  protobuf: ^6.0.0
   ledger_usb: ^1.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+
+dependency_overrides:
+  reactive_ble_mobile:
+    path: ../flutter_reactive_ble/packages/reactive_ble_mobile
+  reactive_ble_platform_interface:
+    path: ../flutter_reactive_ble/packages/reactive_ble_platform_interface
 
 flutter:
