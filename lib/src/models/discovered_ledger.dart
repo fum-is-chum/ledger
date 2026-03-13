@@ -5,7 +5,7 @@ import 'package:ledger/ledger.dart';
 class DiscoveredLedger {
   final LedgerDevice device;
   final StreamSubscription? subscription;
-  final List<DiscoveredService> services;
+  final List<Service> services;
 
   DiscoveredLedger({
     required this.device,

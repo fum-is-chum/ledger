@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:ledger/ledger.dart';
 
 class LedgerBleConnectionManager extends BleConnectionManager {
-  /// Ledger Nano X service id
-  static const serviceId = '13D63400-2C97-0004-0000-4C6564676572';
-
   final _bleManager = FlutterReactiveBle();
   final LedgerOptions _options;
   final PermissionRequestCallback? onPermissionRequest;
   final _connectedDevices = <LedgerDevice, GattGateway>{};
+  final _connectionSubscriptions =
+      <LedgerDevice, StreamSubscription<ConnectionStateUpdate>>{};
 
   LedgerBleConnectionManager({
     required LedgerOptions options,
@@ -21,62 +20,80 @@ class LedgerBleConnectionManager extends BleConnectionManager {
     LedgerDevice device, {
     LedgerOptions? options,
   }) async {
-    // Check for permissions
     final granted = (await onPermissionRequest?.call(status)) ?? true;
     if (!granted) {
       return;
     }
 
-    // There are numerous issues on the Android BLE stack that leave it hanging
-    // when you try to connect to a device that is not in range.
-    // To work around this issue use the method connectToAdvertisingDevice to
-    // first scan for the device and only if it is found connect to it.
-    final c = Completer();
-
-    StreamSubscription? subscription;
     await disconnect(device);
 
+    final connectCompleter = Completer<void>();
+    final serviceId = Uuid.parse(device.deviceInfo.serviceId);
+    final discoveryMap = _servicesWithCharacteristics(device);
+
+    late final StreamSubscription<ConnectionStateUpdate> subscription;
     subscription = _bleManager
         .connectToAdvertisingDevice(
       id: device.id,
-      withServices: [Uuid.parse(serviceId)],
+      withServices: [serviceId],
+      servicesWithCharacteristicsToDiscover: discoveryMap,
       prescanDuration: options?.prescanDuration ?? _options.prescanDuration,
       connectionTimeout:
           options?.connectionTimeout ?? _options.connectionTimeout,
     )
         .listen(
       (state) async {
-        if (state.connectionState == DeviceConnectionState.connected) {
-          final services = await _bleManager.discoverServices(device.id);
-          final ledger = DiscoveredLedger(
-            device: device,
-            subscription: subscription,
-            services: services,
-          );
+        if (state.connectionState == DeviceConnectionState.connected &&
+            !_connectedDevices.containsKey(device)) {
+          try {
+            final services = await _bleManager.getDiscoveredServices(device.id);
+            final ledger = DiscoveredLedger(
+              device: device,
+              subscription: subscription,
+              services: services,
+            );
 
-          final gateway = LedgerGattGateway(
-            bleManager: _bleManager,
-            ledger: ledger,
-            mtu: options?.mtu ?? _options.mtu,
-          );
+            final gateway = LedgerGattGateway(
+              bleManager: _bleManager,
+              ledger: ledger,
+              mtu: options?.mtu ?? _options.mtu,
+            );
 
-          await gateway.start();
-          _connectedDevices[device] = gateway;
+            await gateway.start();
+            _connectedDevices[device] = gateway;
 
-          c.complete();
+            if (!connectCompleter.isCompleted) {
+              connectCompleter.complete();
+            }
+          } catch (ex, st) {
+            await _cleanup(device);
+            if (!connectCompleter.isCompleted) {
+              connectCompleter.completeError(ex, st);
+            }
+          }
         }
 
         if (state.connectionState == DeviceConnectionState.disconnected) {
-          await disconnect(device);
+          await _cleanup(device);
+          if (!connectCompleter.isCompleted) {
+            connectCompleter.completeError(
+              LedgerException(
+                message: 'Device disconnected while establishing BLE session.',
+              ),
+            );
+          }
         }
       },
-      onError: (ex) async {
-        await disconnect(device);
-        c.completeError(ex);
+      onError: (ex, st) async {
+        await _cleanup(device);
+        if (!connectCompleter.isCompleted) {
+          connectCompleter.completeError(ex, st);
+        }
       },
     );
 
-    return c.future;
+    _connectionSubscriptions[device] = subscription;
+    return connectCompleter.future;
   }
 
   @override
@@ -85,46 +102,67 @@ class LedgerBleConnectionManager extends BleConnectionManager {
     LedgerOperation<T> operation,
     LedgerTransformer? transformer,
   ) async {
-    final d = _connectedDevices[device];
-    if (d == null) {
+    final gateway = _connectedDevices[device];
+    if (gateway == null) {
       throw LedgerException(message: 'Unable to send request.');
     }
 
-    return d.sendOperation<T>(
+    return gateway.sendOperation<T>(
       operation,
       transformer: transformer,
     );
   }
 
-  /// Returns the current status of the BLE subsystem of the host device.
   @override
   BleStatus get status => _bleManager.status;
 
-  /// A stream providing the host device BLE subsystem status updates.
   @override
   Stream<BleStatus> get statusStateChanges => _bleManager.statusStream;
 
-  /// Get a list of connected [LedgerDevice]s.
   @override
   List<LedgerDevice> get devices => _connectedDevices.keys.toList();
 
-  /// A stream providing connection updates for all the connected BLE devices.
   @override
   Stream<ConnectionStateUpdate> get deviceStateChanges =>
       _bleManager.connectedDeviceStream;
 
   @override
-  Future<void> disconnect(LedgerDevice device) async {
-    _connectedDevices[device]?.disconnect();
-    _connectedDevices.remove(device);
-  }
+  Future<void> disconnect(LedgerDevice device) => _cleanup(device);
 
   @override
   Future<void> dispose() async {
-    for (var subscription in _connectedDevices.values) {
-      await subscription.disconnect();
+    final devices = _connectedDevices.keys.toList();
+    for (final device in devices) {
+      await _cleanup(device);
     }
 
-    _connectedDevices.clear();
+    final danglingSubscriptions = _connectionSubscriptions.keys.toList();
+    for (final device in danglingSubscriptions) {
+      await _cleanup(device);
+    }
+  }
+
+  Future<void> _cleanup(LedgerDevice device) async {
+    final gateway = _connectedDevices.remove(device);
+    if (gateway != null) {
+      await gateway.disconnect();
+    }
+
+    final subscription = _connectionSubscriptions.remove(device);
+    if (subscription != null) {
+      await subscription.cancel();
+    }
+  }
+
+  Map<Uuid, List<Uuid>> _servicesWithCharacteristics(LedgerDevice device) {
+    final serviceId = Uuid.parse(device.deviceInfo.serviceId);
+    return {
+      serviceId: [
+        Uuid.parse(device.deviceInfo.writeCharacteristicKey),
+        Uuid.parse(device.deviceInfo.notifyCharacteristicKey),
+        if (device.deviceInfo.writeCmdKey != null)
+          Uuid.parse(device.deviceInfo.writeCmdKey!),
+      ],
+    };
   }
 }

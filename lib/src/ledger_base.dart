@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:ledger/ledger.dart';
 
 typedef PermissionRequestCallback = Future<bool> Function(BleStatus status);
@@ -113,6 +114,10 @@ class Ledger {
     LedgerOperation<T> operation, {
     LedgerTransformer? transformer,
   }) {
+    if (kDebugMode) {
+      print(
+          'Sending operation ${operation.runtimeType} to device ${device.name} (${device.id}) (connection type: ${device.connectionType})');
+    }
     switch (device.connectionType) {
       case ConnectionType.usb:
         return _usbManager.sendOperation<T>(device, operation, transformer);
