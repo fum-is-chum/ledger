@@ -27,9 +27,15 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 dependency_overrides:
+  flutter_reactive_ble:
+    git:
+      url: https://github.com/fum-is-chum/flutter_reactive_ble.git
+      ref: master
+      path: packages/flutter_reactive_ble
   reactive_ble_mobile:
-    path: ../flutter_reactive_ble/packages/reactive_ble_mobile
-  reactive_ble_platform_interface:
-    path: ../flutter_reactive_ble/packages/reactive_ble_platform_interface
+    git:
+      url: https://github.com/fum-is-chum/flutter_reactive_ble.git
+      ref: master
+      path: packages/reactive_ble_mobile
 
 flutter:
