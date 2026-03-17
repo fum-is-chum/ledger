@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  scallop_flutter_reactive_ble: ^5.4.1
+  scallop_flutter_reactive_ble: ^6.0.1
   protobuf: ^6.0.0
   ledger_usb: ^1.0.0
 
