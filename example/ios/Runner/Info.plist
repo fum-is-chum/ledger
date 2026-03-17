@@ -27,7 +27,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>This app uses bluetooth to find, connect and sign transactions with your Ledger Nano X</string>
+	<string>This app uses bluetooth to find, connect and sign transactions with your Ledger</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

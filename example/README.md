@@ -7,7 +7,7 @@
 <h1 align="center">ledger-flutter</h1>
 
 <p align="center">
-    A Flutter plugin to scan, connect & sign transactions using a Ledger Nano X
+    A Flutter plugin to scan, connect & sign transactions using a Ledger
     <br />
     <a href="https://pub.dev/documentation/ledger_flutter/latest/"><strong>« Explore the docs »</strong></a>
     <br />

@@ -123,14 +123,14 @@ For more in depth details: [Blog post on iOS bluetooth permissions](https://bett
 
 ```xml
 <key>NSBluetoothAlwaysUsageDescription</key>
-<string>This app uses bluetooth to find, connect and sign transactions with your Ledger Nano X</string>
+<string>This app uses bluetooth to find, connect and sign transactions with your Ledger</string>
 ```
 
 **iOS12 and lower**
 
 ```xml
 <key>NSBluetoothPeripheralUsageDescription</key>
-<string>This app uses bluetooth to find, connect and sign transactions with your Ledger Nano X</string>
+<string>This app uses bluetooth to find, connect and sign transactions with your Ledger</string>
 ```
 
 </details>
