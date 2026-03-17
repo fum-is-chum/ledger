@@ -12,8 +12,8 @@
     <a href="https://pub.dev/documentation/ledger_scallop/latest/"><strong>« Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/wakumo/ledger/issues">Report Bug</a>
-    · <a href="https://github.com/wakumo/ledger/issues">Request Feature</a>
+    <a href="https://github.com/fum-is-chum/ledger/issues">Report Bug</a>
+    · <a href="https://github.com/fum-is-chum/ledger/issues">Request Feature</a>
   </p>
 </div>
 <br/>
@@ -26,14 +26,6 @@ This package has been forked from [ledger-flutter](https://github.com/RootSoft/l
 Ledger devices are the perfect hardware wallets for managing your crypto & NFTs on the go.
 This Flutter plugin makes it easy to find nearby Ledger devices, connect with them and sign transactions over USB and/or BLE.
 
-
-### Web3 Ecosystem Integrations
-
-We are expanding the Flutter ecosystem to grow the Web3 community.
-Check out our other Web3 packages below:
-
-- [WalletConnect](https://pub.dev/packages/walletconnect_dart)
-- [Algorand](https://pub.dev/packages/algorand_dart)
 
 ## Supported devices
 
@@ -54,10 +46,10 @@ ledger: ^latest-version
 
 You might want to install additional Ledger App Plugins to support different blockchains. See the [Ledger Plugins](#custom-ledger-app-plugins) section below.
 
-For example, adding Algorand support:
+For example, adding Sui support:
 
 ```yaml
-ledger_algorand: ^latest-version
+ledger_sui: ^latest-version
 ```
 
 ### Setup
@@ -140,21 +132,22 @@ For more in depth details: [Blog post on iOS bluetooth permissions](https://bett
 Each blockchain follows it own protocol which needs to be implemented before being able to get public keys & sign transactions.
 We introduced the concept of Ledger App Plugins so any developer can easily create and integrate their own Ledger App Plugin and share it with the community.
 
-We added the first support for the Algorand blockchain:
+We added the first support for the Sui blockchain:
 
 `pubspec.yaml`
 ```yaml
-ledger_algorand: ^latest-version
+ledger_sui: ^latest-version
 ```
 
 ```dart
-final algorandApp = AlgorandLedgerApp(ledger);
-final publicKeys = await algorandApp.getAccounts(device);
+final suiApp = SuiLedgerApp(ledger);
+final publicKeys = await suiApp.getAccounts(device);
 ```
 
 #### Existing plugins
 
 - [Algorand](https://pub.dev/packages/ledger_algorand)
+- [Sui](https://pub.dev/packages/ledger_sui)
 - [Create my own plugin](#custom-ledger-app-plugins)
 
 ## Usage
@@ -224,35 +217,8 @@ Depending on the required blockchain and Ledger Application Plugin, the `getAcco
 Based on the implementation and supported protocol, there might be only one public key in the list of accounts.
 
 ```dart
-final algorandApp = AlgorandLedgerApp(ledger);
-
-final publicKeys = await algorandApp.getAccounts(device);
-  accounts.addAll(publicKeys.map((pk) => Address.fromAlgorandAddress(pk)).toList(),
-);
-```
-
-### Signing transactions
-
-You can easily sign transactions using the supplied `LedgerApp`.
-
-Here is an example using the [algorand_dart](https://pub.dev/packages/algorand_dart) SDK:
-
-```dart
-final algorandApp = AlgorandLedgerApp(channel.ledger);
-final signature = await algorandApp.signTransaction(
-    device,
-    transaction.toBytes(),
-);
-
-final signedTx = SignedTransaction(
-  transaction: event.transaction,
-  signature: signature,
-);
-
-final txId = await algorand.sendTransaction(
-    signedTx,
-    waitForConfirmation: true,
-);
+final suiApp = SuiLedgerApp(ledger);
+final ledgerAccounts = await suiApp.getAccountsWithDetails(device);
 ```
 
 ### Disconnect
@@ -287,97 +253,7 @@ try {
 
 Each blockchain follows it own [APDU](https://developers.ledger.com/docs/nano-app/application-structure/) protocol which needs to be implemented before being able to get public keys & sign transactions.
 
-Do you want to support another blockchain like Ethereum, then follow the steps below. You can always check the implementation details in [ledger_algorand]().
-
-### 1. Create a new LedgerApp
-
-Create a new class (e.g. `EthereumLedgerApp`) and extend from `LedgerApp`.
-
-```dart
-class EthereumLedgerApp extends LedgerApp {
-  EthereumLedgerApp(super.ledger);
-
-  @override
-  Future<List<String>> getAccounts(LedgerDevice device) async {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Uint8List> signTransaction(
-    LedgerDevice device,
-    Uint8List transaction,
-  ) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Uint8List>> signTransactions(
-    LedgerDevice device,
-    List<Uint8List> transactions,
-  ) async {
-    throw UnimplementedError();
-  }
-}
-```
-
-### 2. Define the Ledger operation
-
-Create a new Operation class (e.g `EthereumPublicKeyOperation`) for every APDU command and extend from `LedgerOperation`.
-
-Follow and implement the APDU protocol for the desired blockchain.
-
-**APDU protocol:**
-
-* [Ethereum](https://github.com/LedgerHQ/app-ethereum/blob/develop/doc/ethapp.adoc)
-* [Bitcoin](https://github.com/LedgerHQ/app-bitcoin/blob/master/doc/btc.asc)
-* [Algorand](https://github.com/LedgerHQ/app-algorand/blob/develop/docs/APDUSPEC.md)
-
-```dart
-class AlgorandPublicKeyOperation extends LedgerOperation<List<String>> {
-  final int accountIndex;
-
-  AlgorandPublicKeyOperation({
-    this.accountIndex = 0,
-  });
-
-  @override
-  Future<Uint8List> write(ByteDataWriter writer, int index, int mtu) async {
-    writer.writeUint8(0x80); // ALGORAND_CLA
-    writer.writeUint8(0x03); // PUBLIC_KEY_INS
-    writer.writeUint8(0x00); // P1_FIRST
-    writer.writeUint8(0x00); // P2_LAST
-    writer.writeUint8(0x04); // ACCOUNT_INDEX_DATA_SIZE
-
-    writer.writeUint32(accountIndex); // Account index as bytearray
-
-    return writer.toBytes();
-  }
-
-  @override
-  Future<List<String>> read(ByteDataReader reader, int index, int mtu) async {
-    return [
-      Address(publicKey: reader.read(reader.remainingLength)).encodedAddress,
-    ];
-  }
-}
-```
-
-### 3. Implement the LedgerApp
-
-The final step is to use the Ledger client to perform the desired operation on the connected Ledger.
-Implement the required methods on the `LedgerApp`. 
-
-Note that the interface for the `LedgerApp` might change for different blockchains, so feel free to open a Pull Request.
-
-```dart
-@override
-Future<List<String>> getAccounts(LedgerDevice device) async {
-    return ledger.sendOperation<List<String>>(
-      device,
-      AlgorandPublicKeyOperation(accountIndex: accountIndex),
-    );
-}
-```
+You can always check the implementation details in [ledger_sui]().
 
 ## Contributing
 
