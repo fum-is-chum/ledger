@@ -395,4 +395,8 @@ Please read our [Contributing guidelines](CONTRIBUTING.md) and try to follow [Co
 
 ## License
 
-The ledger SDK is released under the MIT License (MIT). See LICENSE for details.
+Project-specific changes in this repository are released under the Apache
+License 2.0. This repository also includes material derived from the
+MIT-licensed upstream [wakumo/ledger](https://github.com/wakumo/ledger).
+See [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
+for details.

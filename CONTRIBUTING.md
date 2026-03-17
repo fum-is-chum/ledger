@@ -56,5 +56,7 @@ on Discord.
 
 ## License
 
-By contributing to ledger, you agree that your contributions will be licensed
-under its [MIT license](LICENSE).
+By contributing to ledger_scallop, you agree that your contributions will be
+licensed under the Apache License 2.0 in [LICENSE](LICENSE). Third-party code
+in this repository remains subject to its original license terms; see
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
