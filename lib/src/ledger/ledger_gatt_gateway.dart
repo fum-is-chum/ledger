@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:ledger/ledger.dart';
+import 'package:ledger_scallop/ledger_scallop.dart';
 
 /// https://learn.adafruit.com/introduction-to-bluetooth-low-energy/gatt
 /// https://gist.github.com/btchip/e4994180e8f4710d29c975a49de46e3a

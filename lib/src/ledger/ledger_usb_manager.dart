@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:ledger/ledger.dart';
+import 'package:ledger_scallop/ledger_scallop.dart';
 import 'package:ledger_usb/ledger_usb.dart';
 import 'package:ledger_usb/usb_device.dart';
 

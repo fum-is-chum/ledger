@@ -1,4 +1,4 @@
-import 'package:ledger/ledger.dart';
+import 'package:ledger_scallop/ledger_scallop.dart';
 
 abstract class BleConnectionManager {
   Future<void> connect(LedgerDevice device, {LedgerOptions? options});

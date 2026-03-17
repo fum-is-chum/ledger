@@ -1,5 +1,5 @@
 
-import 'package:ledger/ledger.dart';
+import 'package:ledger_scallop/ledger_scallop.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class LedgerChannel {

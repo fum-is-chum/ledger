@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:ledger/ledger.dart';
+import 'package:ledger_scallop/ledger_scallop.dart';
 
 import 'ledger_device_type.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:ledger/ledger.dart';
+import 'package:ledger_scallop/ledger_scallop.dart';
 
 typedef PermissionRequestCallback = Future<bool> Function(BleStatus status);
 

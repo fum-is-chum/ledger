@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:ledger/ledger.dart';
+import 'package:ledger_scallop/ledger_scallop.dart';
 
 class LedgerBleConnectionManager extends BleConnectionManager {
   final _bleManager = FlutterReactiveBle();
