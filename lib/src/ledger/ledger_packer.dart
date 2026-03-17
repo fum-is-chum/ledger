@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:ledger/src/api/ble_packer.dart';
-import 'package:ledger/src/utils/buffer.dart';
+import 'package:ledger_scallop/src/api/ble_packer.dart';
+import 'package:ledger_scallop/src/utils/buffer.dart';
 
 class LedgerPacker extends BlePacker {
   @override
