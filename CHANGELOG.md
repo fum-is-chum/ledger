@@ -1,3 +1,11 @@
+## 1.1.1 - 2026-03-18
+
+### Added
+- Add `.pubignore` to exclude dev files from pub publish ([8586e96](https://github.com/fum-is-chum/ledger/commit/8586e9640f0f2b581e774d2cbba761f323fb1e60))
+
+### Changed
+- Bump `scallop_flutter_reactive_ble` dependency to ^6.0.1 ([cde177c](https://github.com/fum-is-chum/ledger/commit/cde177c1f79fbc02bb19dacd05d46b07c56def4d))
+
 ## 1.1.0 - 2026-03-17
 
 ### Added
