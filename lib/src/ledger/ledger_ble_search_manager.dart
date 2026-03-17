@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:ledger_scallop/ledger_scallop.dart';
 
-import 'ledger_device_type.dart';
-
 class LedgerBleSearchManager extends BleSearchManager {
   final List<Uuid> _withServices =
       LedgerDeviceType.ble.map((e) => Uuid.parse(e.serviceId)).toList();
