@@ -1,0 +1,28 @@
+# Development
+.dart_tool/
+.packages
+build/
+pubspec.lock
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Example app
+example/
+
+# Git & CI
+.git/
+.github/
+.gitignore
+
+# Miscellaneous
+.DS_Store
+*.log
+.metadata
+.flutter-plugins
+.flutter-plugins-dependencies
+CONTRIBUTING.md
