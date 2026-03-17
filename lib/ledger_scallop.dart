@@ -1,4 +1,4 @@
-library ledger;
+library ledger_scallop;
 
 export 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
